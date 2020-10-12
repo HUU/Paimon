@@ -1,0 +1,24 @@
+apt-get update
+apt-get install install build-essential devscripts ffmpeg libpcre3 libpcre3-dev libssl-dev zlib1g-dev
+
+wget https://github.com/arut/nginx-rtmp-module/archive/v1.2.1.tar.gz
+tar xvzf v1.2.1.tar.gz
+
+wget http://nginx.org/download/nginx-1.19.3.tar.gz
+tar xvzf nginx-1.19.3.tar.gz
+cd nginx-1.19.3
+
+./configure --prefix=/usr/local/nginx --with-http_ssl_module --add-module=../nginx-rtmp-module-1.2.1 --with-cc-opt=-Wno-error
+make -j 1
+make install
+
+
+mv nginx.service /etc/systemd/system
+chown root:root /etc/systemd/system/nginx.service
+chmod 755 /etc/systemd/system/nginx.service
+
+sudo useradd -r nginx
+sudo chown -R nginx:root /usr/local/nginx
+
+systemctl daemon-reload
+service nginx start_
