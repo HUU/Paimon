@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+    rtmpserver:
+        build:
+            context: .
+            dockerfile: tools/pi_emulator/rtmp_server/Dockerfile
+        image: beball_emulator:latest
+        ports:
+            - "80:80"
+        volumes:
+            - type: bind
+              source: /tmp/hls
+              target: /tmp/hls
+    gopro:
+        build:
+            context: .
+            dockerfile: tools/pi_emulator/gopro/Dockerfile
+        image: gopro_emulator:latest
+        environment:
+            RTMP_SERVER: rtmpserver
